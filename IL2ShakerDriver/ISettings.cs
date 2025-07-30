@@ -9,7 +9,8 @@ public interface ISettings
     public IEffectSettings LandingGear     { get; }
     public IEffectSettings Bumps           { get; }
     public IEffectSettings Flaps           { get; }
-    public IEffectSettings RollRate        { get; }
+    public IEffectSettings FlapsContinuous { get; }
+    public IEffectSettings RollRate { get; }
     public IEffectSettings GForces         { get; }
     public IEffectSettings StallBuffet     { get; }
     public IEffectSettings Impacts         { get; }
