@@ -123,6 +123,7 @@ internal class Audio : ISampleProvider
         _landingGear.UpdateSettings(settings.LandingGear);
         _bumps.UpdateSettings(settings.Bumps);
         _flaps.UpdateSettings(settings.Flaps);
+        _flapsContinuous.UpdateSettings(settings.FlapsContinuous);
         _rollRate.UpdateSettings(settings.RollRate);
         _gForces.UpdateSettings(settings.GForces);
         _stallBuffet.UpdateSettings(settings.StallBuffet);

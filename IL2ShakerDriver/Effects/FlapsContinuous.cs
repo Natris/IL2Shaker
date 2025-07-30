@@ -8,14 +8,14 @@ namespace IL2ShakerDriver.Effects;
 internal class FlapsContinuous : Effect
 {
     private readonly HarmonicsGenerator _harmonicsGenerator = new(2, 3, 4);
-    private          bool               _active;
-    private          float              _previousCoeff = 0;
+    private          bool               _active = false;
+    private float _previousCoeff = 0;
 
     private const float ActuatingBaseFreq = 28;
 
     private Vector4 _actuatingAmplitudes;
 
-    public Flaps(ISampleProvider source, Audio audio) : base(source, audio)
+    public FlapsContinuous(ISampleProvider source, Audio audio) : base(source, audio)
     {
     }
 
@@ -34,15 +34,23 @@ internal class FlapsContinuous : Effect
 
     protected override void OnStateDataReceived(StateData stateData)
     {
+        bool gearDown = false;
+        for (int i = 0; i < 4; i++) {
+            if (stateData.LandingGearPosition[i] > 0) {
+                gearDown = true;
+            }
+        }
+
         float position = stateData.FlapsPosition;
-        bool active = position != 0;
+        bool active = position != 0 && !gearDown;
         bool wasActive = _active;
         float coeff = 0;
-        if (active) {
-            //start at 20% of max volume and go up
-            coeff = 0.2 + position / 2;
+        if (active)
+        {
+            //start at 50% of max volume and go up
+            coeff = (float)0.75 + position * (float)0.25;
         }
-        
+
         if (stateData.Paused && active)
         {
             active = false;
@@ -54,17 +62,21 @@ internal class FlapsContinuous : Effect
             // Stop the generator
             _harmonicsGenerator.SetTarget(ActuatingBaseFreq, Vector4.Zero, 0.25f);
         }
-        else if (active && !wasActive)
+        else if (active)
         {
             Vector4 amplitudes = new Vector4(_actuatingAmplitudes[0] * coeff,
-                                             _actuatingAmplitudes[1] * coeff,
-                                             _actuatingAmplitudes[2] * coeff,
-                                             _actuatingAmplitudes[3] * coeff);
-            
-            _harmonicsGenerator.SetTarget(ActuatingBaseFreq, amplitudes, 0.25f);
+                                                _actuatingAmplitudes[1] * coeff,
+                                                _actuatingAmplitudes[2] * coeff,
+                                                _actuatingAmplitudes[3] * coeff);
+
+            if (!wasActive || coeff != _previousCoeff)
+            {
+                Logging.At(this).Debug("position {Pos} coeff {c}", position, coeff);
+                _harmonicsGenerator.SetTarget(ActuatingBaseFreq, amplitudes, 0.25f);
+            }
         }
 
-        _active        = active;
+        _active = active;
         _previousCoeff = coeff;
     }
 }
