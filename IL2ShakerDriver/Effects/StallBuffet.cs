@@ -9,7 +9,15 @@ internal class StallBuffet : Effect
     private const    float         FrequencyMultiplier = 4f;
     private const    float         AmplitudeMultiplier = 3.5f;
     private const    float         TransitionTime      = 0.05f;
-    private readonly WaveGenerator _waveGenerator      = new();
+    private readonly WaveGenerator _waveGenerator = new();
+
+
+    private DateTime last = DateTime.UtcNow;
+    public float max_freq_freq = 0;
+    public float max_freq_amp = 0;
+
+    public float max_amp_freq = 0;
+    public float max_amp_amp = 0;
 
     private float _maxAmp;
 
@@ -27,8 +35,34 @@ internal class StallBuffet : Effect
 
     protected override void OnStateDataReceived(StateData stateData)
     {
+        bool isOlderThan500ms = (DateTime.UtcNow - last) > TimeSpan.FromMilliseconds(500);
+        if (isOlderThan500ms)
+        {
+            Logging.At(this).Debug("StallBuffet: max freq f {max_freq_freq} a {max_freq_amp}, max amp f {max_amp_freq} a {max_amp_amp}",
+                max_freq_freq, max_freq_amp, max_amp_freq, max_amp_amp);
+            max_freq_freq = 0;
+            max_freq_amp = 0;
+            max_amp_freq = 0;
+            max_amp_amp = 0;
+            last = DateTime.UtcNow;
+        }
+        if (max_freq_freq < stateData.StallBuffetFrequency)
+        {
+            max_freq_freq = stateData.StallBuffetFrequency;
+            max_freq_amp = stateData.StallBuffetAmplitude;
+        }
+        if (max_amp_amp < stateData.StallBuffetAmplitude)
+        {
+            max_amp_freq = stateData.StallBuffetFrequency;
+            max_amp_amp = stateData.StallBuffetAmplitude;
+        }
         float nextFreq = stateData.StallBuffetFrequency * FrequencyMultiplier;
-        float nextAmp  = stateData.StallBuffetAmplitude * AmplitudeMultiplier;
+        float correctedAmp = stateData.StallBuffetAmplitude;
+        if (correctedAmp > 0.10F)
+        {
+            correctedAmp = 0.10F;
+        }
+        float nextAmp = correctedAmp * AmplitudeMultiplier;
 
         if (stateData.StallBuffetAmplitude > _maxAmp)
         {
