@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net7.0-windows</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
@@ -17,6 +17,10 @@
         <PackageReference Include="YamlDotNet" Version="13.1.1"/>
     </ItemGroup>
 
+    <ItemGroup>
+         <EmbeddedResource Include="Resources\2.wav" />
+         <EmbeddedResource Include="Resources\4.wav" />
+    </ItemGroup>
     <ItemGroup>
         <None Update="Planes.yaml">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>

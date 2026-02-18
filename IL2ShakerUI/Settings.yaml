@@ -15,6 +15,9 @@ Bumps:
 Flaps:
   Enabled: true
   Value: -15
+FlapsContinuous:
+  Enabled: false
+  Value: -15
 RollRate:
   Enabled: true
   Value: -15

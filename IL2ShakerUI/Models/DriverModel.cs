@@ -85,6 +85,7 @@ internal class DriverModel : IDisposable
         CopyEffectSettings(dst.LandingGear, src.LandingGear);
         CopyEffectSettings(dst.Bumps, src.Bumps);
         CopyEffectSettings(dst.Flaps, src.Flaps);
+        CopyEffectSettings(dst.FlapsContinuous, src.FlapsContinuous);
         CopyEffectSettings(dst.StallBuffet, src.StallBuffet);
         CopyEffectSettings(dst.Impacts, src.Impacts);
         CopyEffectSettings(dst.HitsReceived, src.HitsReceived);

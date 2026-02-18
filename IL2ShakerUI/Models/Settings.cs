@@ -19,7 +19,8 @@ internal class Settings : ReactiveObject, ISettings
     public IEffectSettings LandingGear     { get; set; }
     public IEffectSettings Bumps           { get; set; }
     public IEffectSettings Flaps           { get; set; }
-    public IEffectSettings RollRate        { get; set;  }
+    public IEffectSettings FlapsContinuous { get; set; }
+    public IEffectSettings RollRate { get; set; }
     public IEffectSettings GForces         { get; set;  }
     public IEffectSettings StallBuffet     { get; set; }
     public IEffectSettings Impacts         { get; set; }
@@ -42,6 +43,7 @@ internal class Settings : ReactiveObject, ISettings
         LandingGear     = new EffectSettings();
         Bumps           = new EffectSettings();
         Flaps           = new EffectSettings();
+        FlapsContinuous = new EffectSettings();
         RollRate        = new EffectSettings();
         GForces         = new EffectSettings();
         StallBuffet     = new EffectSettings();

@@ -27,7 +27,8 @@ internal class Audio : ISampleProvider
     private readonly LandingGear                _landingGear;
     private readonly Bumps                      _bumps;
     private readonly Flaps                      _flaps;
-    private readonly RollRate                   _rollRate;
+    private readonly FlapsContinuous            _flapsContinuous;
+    private readonly RollRate _rollRate;
     private readonly GForces                    _gForces;
     private readonly StallBuffet                _stallBuffet;
     private readonly Impacts                    _impacts;
@@ -51,7 +52,8 @@ internal class Audio : ISampleProvider
         _landingGear     = new LandingGear(_engine, this);
         _bumps           = new Bumps(_landingGear, this);
         _flaps           = new Flaps(_bumps, this);
-        _rollRate        = new RollRate(_flaps, this);
+        _flapsContinuous = new FlapsContinuous(_flaps, this);
+        _rollRate        = new RollRate(_flapsContinuous, this);
         _gForces         = new GForces(_rollRate, this);
         _stallBuffet     = new StallBuffet(_gForces, this);
         _impacts         = new Impacts(_stallBuffet, this);
@@ -121,6 +123,7 @@ internal class Audio : ISampleProvider
         _landingGear.UpdateSettings(settings.LandingGear);
         _bumps.UpdateSettings(settings.Bumps);
         _flaps.UpdateSettings(settings.Flaps);
+        _flapsContinuous.UpdateSettings(settings.FlapsContinuous);
         _rollRate.UpdateSettings(settings.RollRate);
         _gForces.UpdateSettings(settings.GForces);
         _stallBuffet.UpdateSettings(settings.StallBuffet);
